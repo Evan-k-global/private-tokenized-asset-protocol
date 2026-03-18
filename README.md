@@ -30,53 +30,57 @@ TAP is designed around a different model:
 ### Private operating layer and public bridge rails
 
 ```mermaid
-flowchart TD
-  A["Institutional source systems"] --> B["TAP control plane"]
-  B --> C["Policy and proof layer"]
-  C --> D["Private consortium asset state"]
-  D --> E["Bridge rails"]
-  E --> F["Public Ethereum settlement and distribution"]
+flowchart LR
+  A["Bank / Consortium Source Systems"] --> B["TAP Control Plane on Zeko-side Infrastructure"]
+  B --> C["Private Stablecoin Ledger"]
+  B --> D["Private Tokenized Stock Ledger"]
+  B --> E["Policy Engine + Proof Verification"]
+  B --> F["Maker-Checker + Issuer Controls"]
+
+  C --> G["Bridge / Exit Rail"]
+  D --> G
+
+  G --> H["Public Ethereum Asset Rails"]
+
+  H --> I["Public Stablecoin Representation"]
+  H --> J["Public Settlement / Distribution Venues"]
+
+  K["Customer / Institution Deposit from Ethereum"] --> H
+  H --> L["Bridge / Entry Rail"]
+  L --> B
 ```
 
-### Parallel asset model
+### Source evidence to private state transition
 
 ```mermaid
-flowchart TD
-  A["TAP control plane"] --> B["Private stablecoin rail"]
-  A --> C["Private tokenized stock rail"]
+flowchart LR
+  A["Institutional Source Systems"] --> B["API Adapter Lane"]
+  A --> C["zkTLS Attestation Lane"]
 
-  B --> D["Consortium payments, treasury, settlement"]
-  C --> E["Private issuance, allocation, restricted trading"]
-
-  D --> F["Optional bridge to Ethereum"]
-  E --> F
-```
-
-### Decision flow
-
-```mermaid
-flowchart TD
-  A["Source evidence"] --> B["Policy evaluation"]
-  B --> C["Proof verification"]
-  C --> D["Issuer approval controls"]
-  D --> E["Settlement record"]
-  E --> F["Private asset state transition"]
-```
-
-### API adapter and zkTLS input lanes
-
-```mermaid
-flowchart TD
-  A["Institutional source systems"] --> B["API adapter lane"]
-  A --> C["zkTLS attestation lane"]
-
-  B --> D["Canonical source evidence"]
+  B --> D["Canonical Source Evidence"]
   C --> D
 
-  D --> E["Policy evaluation"]
-  E --> F["Proof verification"]
-  F --> G["Issuer approval controls"]
-  G --> H["Private asset state transition"]
+  D --> E["Policy Evaluation"]
+  E --> F["Proof Verification"]
+  F --> G["Issuer Approval Controls"]
+  G --> H["Settlement Record"]
+  H --> I["Private Asset State Transition"]
+```
+
+### Dual-asset market structure
+
+```mermaid
+flowchart LR
+  A["TAP Control Plane"] --> B["Private Stablecoin Rail"]
+  A --> C["Private Tokenized Stock Rail"]
+
+  B --> D["Payments, Treasury, Cash Settlement"]
+  C --> E["Issuance, Allocation, Restricted Trading"]
+
+  D --> F["Consortium Market Activity"]
+  E --> F
+
+  F --> G["Optional Bridge to Ethereum"]
 ```
 
 ## What’s In The Repo
