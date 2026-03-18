@@ -73,6 +73,7 @@ This project is packaged for bank/consortium teams to run themselves.
 - Provider strategy: `docs/provider-strategy.md`
 - External zkTLS adaptations: `docs/external-zktls-adaptations.md`
 - Architecture blog post: `docs/blog-private-tokenized-asset-protocol.md`
+- Launch assets: `docs/launch/`
 - Bank onboarding playbook: `docs/bank-onboarding-playbook.md`
 - Bank sandbox onboarding packet: `docs/bank-sandbox-onboarding-packet.md`
 - Customer sandbox mapping kit: `docs/customer-sandbox-mapping-kit.md`

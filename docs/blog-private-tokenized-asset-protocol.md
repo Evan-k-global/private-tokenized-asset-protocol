@@ -2,91 +2,176 @@
 
 ## Building TAP: a private, permissioned, sovereign-rollup control plane for stablecoins and tokenized stocks
 
-Public-chain tokenization got one thing very right: it proved there is demand for programmable digital representations of real assets.
+The first generation of tokenization proved demand.
 
-It also locked the industry into a narrow operating model:
+It did not solve the real institutional problem.
 
-- issuance on a fully public chain
-- compliance gates bolted on at the edges
-- sensitive business logic off-chain and opaque
-- customer and institutional activity exposed by default
-- fragmented issuer ecosystems with limited defensibility
+Most tokenized assets today are issued into a fully public operating model, usually on Ethereum, with compliance gates bolted on around the edges. That model is easy to understand, easy to market, and increasingly easy to copy.
 
-That model is good enough for first-generation tokenization.
+It is also a weak long-term foundation.
 
-It is not good enough for where the market is going.
+Public-first tokenization creates a market structure that is:
 
-Banks, brokers, custodians, transfer agents, consortium operators, and regulated issuers do not want to live on a public spreadsheet. They need private state, controlled participation, auditable policy enforcement, and the ability to keep ecosystem value inside infrastructure they govern. They also need a path back to public liquidity and settlement rails when that is useful.
+- privacy-destructive
+- operationally fragmented
+- strategically commoditized
+- weakly defensible for issuers
+- awkward for real institutional workflows
+
+If every issuer launches the same public token on the same public chain, with the same wallet rails, the same visibility model, and roughly the same gatekeeping pattern, the result is not durable differentiation. It is a race to the bottom around distribution, branding, and balance-sheet trust.
+
+That may be enough for the first wave.
+
+It is not enough for the institutions that will actually own the next wave.
+
+The banks, custodians, brokers, transfer agents, and consortium operators that move first on private, permissioned tokenization infrastructure will have a much stronger moat. They will control the network, the policies, the compliance surface, the data relationships, the application ecosystem, and the bridge to public liquidity when and where they choose.
 
 That is the design space behind TAP: the Tokenized Asset Protocol.
 
-TAP is a self-hostable control plane for private asset tokenization workflows. It is designed for permissioned, sovereign rollup environments that can settle privately most of the time, while still bridging to public chains like Ethereum when needed.
+TAP is a self-hostable control plane for private asset tokenization. It is designed for permissioned consortium environments built around sovereign rollup patterns, private execution, proof-linked compliance, and optional settlement or interoperability rails to Ethereum.
 
-The key idea is simple:
+The core thesis is straightforward:
 
 - stablecoins are the cash leg
-- tokenized stocks and funds are the risk-asset leg
-- identity, balance, holdings, and suitability data stay off-chain
-- policy decisions become deterministic and auditable
-- proofs and attestations become the bridge between private source systems and private on-chain execution
+- tokenized stocks, funds, and other RWAs are the risk-asset leg
+- identity, balance, holdings, and suitability data should stay off-chain
+- policy should be explicit, versioned, and auditable
+- state transitions should be governed by proofs and approvals, not by blind trust in application code
+- public chains should be bridge rails, not the default home for the full operating system
 
-That combination creates something earlier tokenization systems could not really do: operate a private two-sided market with regulated controls, customer data minimization, consortium governance, and optional public-chain settlement at the edges.
+That combination opens up something earlier tokenization systems could not really deliver: private two-way markets with regulated controls, institutional-grade permissions, customer-data minimization, and optional public-chain distribution at the edge.
 
-## What we built
+## Why the current public-chain model is not enough
 
-Over the course of this build, TAP moved from protocol framing to a working demo and integration toolkit.
+Public Ethereum has been the easiest place to launch tokenized assets.
 
-Today the repo includes:
+That does not make it the right place to build the full institutional operating model.
 
-- a multi-package TAP backend
+The current pattern has several structural weaknesses.
+
+### 1. It exposes too much
+
+A fully public tokenization stack leaks more than most institutions actually want to reveal:
+
+- issuance timing
+- transfer timing
+- address-level behavior
+- treasury patterns
+- ecosystem composition
+- network relationships between customers, market makers, counterparties, and service providers
+
+Even when names are not directly visible, the activity graph itself is valuable information.
+
+For regulated institutions, that is not a cosmetic downside. It is a strategic and operational problem.
+
+### 2. It turns tokenization into a commodity
+
+If tokenization means issuing a public ERC-20 or similar public asset wrapper with off-chain gating, then the market converges quickly:
+
+- same chain
+- same wallet patterns
+- same public state model
+- same asset visibility
+- same distribution logic
+- same integration surface
+
+That makes the token itself easy to copy and the surrounding product increasingly hard to defend.
+
+The first institutions to move beyond that model and build private consortium rails will own a much stronger moat.
+
+### 3. It keeps compliance at the edge instead of in the transition logic
+
+A lot of current systems say they are compliant, but what they really mean is:
+
+- run a check before onboarding
+- maintain an allowlist
+- block obvious violations when possible
+
+That is not the same as a policy-linked state machine.
+
+The future institutional model needs:
+
+- versioned policies
+- deterministic policy hashes
+- source evidence linked to decisions
+- proof-linked approvals
+- explicit issuer controls
+- auditable settlement decisions
+
+In other words, compliance cannot just surround the protocol. It has to be part of the protocol’s actual operating logic.
+
+### 4. It confuses public settlement with public execution
+
+The real opportunity is not “everything private forever” and it is not “everything public by default.”
+
+It is a layered model:
+
+- private execution and control inside the consortium environment
+- optional public settlement, distribution, or interoperability through bridge rails
+
+This is a much better fit for how institutions actually want to operate.
+
+## What TAP is
+
+TAP is a self-hostable control plane for private tokenized asset workflows.
+
+It is designed so a bank, issuer, broker, custodian, or consortium can run its own environment and control:
+
+- who is allowed in
+- what source systems are trusted
+- what policies are active
+- how mint, burn, issue, allocate, restrict, and redeem actions are approved
+- how proof-backed decisions are settled
+- when assets move to or from public Ethereum rails
+
+Today, the repository includes:
+
+- a multi-package backend control plane
 - policy versioning and settlement-time policy linkage
 - maker-checker issuer workflows
-- proof generation and verification lanes
-- zkTLS integration paths
+- real `o1js` proof runtime paths
+- zkTLS-backed source integration
 - partner API adapter infrastructure
-- stablecoin and stock lifecycle flows
+- stablecoin lifecycle flows
+- tokenized stock lifecycle flows
 - a dual-asset flagship transcript
 - a customer-owned sandbox integration kit
+- public runbooks, onboarding packets, and pilot materials
 
-The repo is not a single app. It is a full operating surface.
+This is not a single showcase app. It is a real protocol and operator surface.
 
 At a high level:
 
-- `apps/api-gateway` is the control plane API
+- `apps/api-gateway` is the main control plane API
 - `packages/policy-engine` manages versioned policy state
 - `packages/prover-service` manages proof verification lanes
 - `packages/source-adapters` connects external systems
 - `packages/attestor-service` handles statement, phone, and zkTLS attestation flows
-- `packages/compliance-engine` evaluates policy decisions
-- `packages/contracts` is the settlement/zkApp boundary
-- `scripts/` contains operator, demo, transcript, and onboarding workflows
-
-We also built the materials needed to make it legible to real counterparties:
-
-- onboarding packets
-- pilot proposals
-- customer integration templates
-- public transcript packs
-- flagship runbooks
-- provider strategy documentation
-
-That matters because protocol design without operator clarity is just theory.
+- `packages/compliance-engine` evaluates policy outcomes
+- `packages/contracts` defines the settlement or zkApp boundary
+- `packages/bridge-service` defines the bridge orchestration layer
+- `scripts/` packages the operating flows, transcript generation, and customer onboarding path
 
 ## The architecture
 
-The architecture is built around a very specific institutional operating model.
+The architecture starts from a simple institutional reality:
 
-Customer data and business state originate in institution-controlled systems:
+customer truth and business truth usually live outside the blockchain.
+
+Those truths live in:
 
 - bank balance APIs
-- KYC systems
+- KYC providers
 - holdings and custody ledgers
 - treasury systems
-- private HTTPS systems that can be proven through zkTLS
+- issuer systems of record
+- private HTTPS systems that can be proven via zkTLS
 
-Those sources are not pushed directly on-chain. Instead, they are normalized through TAP’s adapter and attestation surface, then linked into policy and settlement workflows.
+TAP does not try to shove those systems directly on-chain.
 
-### Architecture diagram
+Instead, it normalizes them into a private control plane where source evidence, policy, proofs, and approvals all contribute to whether an asset state transition is allowed.
+
+### Control plane overview
 
 ```mermaid
 flowchart LR
@@ -107,7 +192,17 @@ flowchart LR
   M --> N["Public Ethereum / Other Settlement Rails"]
 ```
 
-### Private rollup operating layer vs public Ethereum rails
+This is not just a proof pipeline.
+
+It is a private state-transition control plane where:
+
+- source truth stays off-chain
+- compliance logic is explicit and durable
+- approvals are operationally real
+- settlement artifacts are auditable
+- private asset state is not exposed by default
+
+### Private operating layer vs public bridge rails
 
 ```mermaid
 flowchart LR
@@ -136,7 +231,15 @@ This is the split that matters:
 - Ethereum is the public interoperability and distribution rail
 - the bridge is the controlled path between the two
 
-### Control-plane flow from source truth to private state transition
+That is the right posture for institutions.
+
+Zeko or Mina-style infrastructure is where proof-heavy logic, recursive verification, private control, and permissioned execution belong.
+
+Ethereum remains the most important public settlement and distribution rail.
+
+The future is not choosing one and rejecting the other. It is using each for what it is actually best at.
+
+### Proof-linked state transition flow
 
 ```mermaid
 flowchart LR
@@ -149,7 +252,17 @@ flowchart LR
   G --> H["Private asset state transition"]
 ```
 
-This is the core TAP claim: private tokenized assets should not move because a front end says they can move. They should move because source evidence, policy state, proof verification, and issuer controls all agree that the transition is allowed.
+This is the core TAP claim.
+
+A private asset should not move because an application says it should move. It should move because:
+
+- the source data is trusted
+- the policy is current
+- the proof verifies
+- the approval path is satisfied
+- the settlement record is durable
+
+That is a much stronger institutional model.
 
 ### Customer-owned integration path
 
@@ -162,352 +275,200 @@ flowchart LR
   E --> F["Production integration plan"]
 ```
 
-That final diagram matters for go-to-market. TAP is not supposed to be a closed hosted product that only works with pre-approved vendors. The public repo proves the architecture. The customer-owned integration path proves how a bank or consortium can bring its own systems and turn the repo into a real pilot.
+This matters just as much as the protocol design.
 
-This is not just a “proof pipeline.”
+TAP is not meant to be a closed hosted product that only works with a fixed set of vendors. The public repo proves the architecture. The customer-owned integration path proves how a real bank or consortium can bring its own sandbox and turn the repo into a real pilot.
 
-It is a control plane where:
+## Why Zeko-style infrastructure matters here
 
-- source truth stays off-chain
-- compliance logic is explicit and versioned
-- approval paths are operationally real
-- settlement artifacts remain auditable
-- private execution remains private
+The private side of this architecture needs a proof-native operating environment.
 
-## Why this was not really possible before
+That is where Zeko and Mina-style infrastructure becomes important.
 
-There have been earlier pieces of this system in isolation.
+What is native to this side of the system:
 
-You could have:
+- proof-centric application logic
+- recursive proof composition
+- data-minimized state transitions
+- permissioned control planes
+- richer off-chain execution with on-chain proof settlement
+- application-specific state models that do not have to expose full business context publicly
 
-- public issuance on Ethereum
-- permissioned transfer logic in smart contracts
-- off-chain compliance reviews
-- private databases feeding internal ledgers
-- zero-knowledge systems proving isolated facts
+That is exactly the shape you want for:
 
-What you could not easily do was combine them into one practical operator workflow with the right tradeoffs.
+- private stablecoin issuance
+- private transfer compliance
+- tokenized equity restrictions
+- consortium governance
+- institution-to-institution workflows
 
-### 1. Public-first tokenization exposed too much
+Ethereum can still be the public bridge surface.
 
-Traditional tokenization on public Ethereum leaks too much institutional information:
+But it should not be forced to be the full private operating system.
 
-- issuance timing
-- transfer timing
-- asset topology
-- address-level clustering
-- treasury movement
-- ecosystem composition
+## Why the first banks to do this well will build a moat
 
-For regulated financial institutions, that is not a small drawback. It is a structural mismatch.
+A bank that launches a public stablecoin on a public chain gets some distribution and some attention.
 
-### 2. Existing compliance gates were mostly edge gates
+A bank or consortium that launches the full private operating layer gets something much more valuable.
 
-Most first-wave tokenized assets used a simple pattern:
+It gets:
 
-- run checks off-chain
-- gate wallet onboarding
-- issue a token publicly
-- hope transfer restrictions remain manageable
+- private network effects
+- customer-data advantage without public leakage
+- policy and compliance infrastructure embedded in the platform
+- differentiated application workflows on top of the asset rail
+- institutional interoperability inside a governed ecosystem
+- control over how and when public-chain access happens
 
-That is not the same as a policy-linked operating model.
+That is a real moat.
 
-TAP takes the opposite approach:
+The token itself is not the moat.
 
-- source collection is explicit
-- policy is versioned
-- proof linkage is verified at settlement time
-- issuer workflows are operationally constrained
+The operating environment is the moat.
 
-That means the compliance layer is not just “before chain.” It is part of the system’s actual state transition logic.
+The proof system is the moat.
 
-### 3. Private execution plus public optionality was missing
+The consortium rails are the moat.
 
-The interesting future is not “everything is public” or “everything is private.”
+The application ecosystem built on top of a private settlement layer is the moat.
 
-It is:
+If the industry stays trapped in the “issue publicly and gate access at the edges” model, then stablecoins and tokenized assets become increasingly fractionalized and commoditized. Issuers become wrappers around public rails instead of owners of differentiated infrastructure.
 
-- private rollup execution for institutional ecosystems
-- public-chain bridgeability when distribution or interoperability matters
+The institutions that move earlier toward private consortium tokenization will be in a much stronger position.
 
-That lets issuers preserve internal network effects while still maintaining optional access to public markets.
+## What we implemented in TAP
 
-### 4. zkTLS and real proof lanes changed the input side
+Over the course of this build, TAP moved from concept to a working pilot scaffold.
 
-The modern shift is not only about private settlement. It is also about private, verifiable inputs.
+We implemented:
 
-TAP now supports multiple ways to bring in high-value facts:
+- versioned policy registry with deterministic hashes
+- settlement-time policy enforcement
+- maker-checker issuer workflows
+- stablecoin mint and burn paths
+- tokenized stock issue, allocate, restrict, and redeem paths
+- real `o1js` proof runtime lanes
+- pluggable verifier contract for proof verification
+- zkTLS-backed source integration
+- bank-profile zkTLS source flow
+- partner API adapter infrastructure
+- tenant-scoped provider configuration
+- customer sandbox onboarding and mapping kits
+- one-command pilot packs and transcript verification
+- a dual-asset flagship artifact that shows the cash leg and the risk-asset leg together
 
-- direct partner API adapters
-- generic REST mappings
-- real `o1js` proof verification lanes
-- external zkTLS-backed attestations
+That matters because it turns the protocol from a thesis into something a counterparty can actually inspect, run, and adapt.
 
-This matters because many institutional facts do not begin life in a blockchain-native system. They begin life in:
+## The dual-asset model matters
 
-- web applications
-- internal APIs
-- treasury portals
-- custody systems
-- KYC providers
+A stablecoin-only story is incomplete.
 
-Once you can verify those sources without publishing the underlying data, private tokenization becomes much more realistic.
+A tokenized-equity-only story is incomplete.
 
-## The core design principles
+A functioning on-chain market needs both sides:
 
-### 1. Provider-agnostic by default
+- cash leg
+- risk-asset leg
 
-TAP is not a Plaid product, a Persona product, or a custody-vendor product.
+That is why TAP treats both as first-class:
 
-We added reference adapters because real systems need proof points. But the architecture is built so a customer can bring:
+- private stablecoin workflows represent the money rail
+- tokenized stock workflows represent the asset rail
 
-- a bank sandbox
-- a brokerage API
-- a custody ledger
-- a treasury system
-- a zkTLS-compatible HTTPS source
+Together, they form the beginning of a private two-way market.
 
-That is why we built:
+That is the real institutional opportunity.
+
+## Reference providers are not the product
+
+The repository includes reference integrations and templates because real systems need proving grounds.
+
+But TAP is not a Plaid product, or a Persona product, or a custody-vendor product.
+
+The actual commercial model is:
+
+- show the architecture publicly
+- show the proof, policy, and workflow model publicly
+- show reference integrations publicly
+- then work with a bank, issuer, or consortium to wire TAP into its own sandbox and systems
+
+That is why the repo includes:
 
 - onboarding packets
-- a provider strategy
-- a customer sandbox mapping kit
-- customer bootstrap templates
-- a customer-owned dual-asset demo pack
+- mapping kits
+- bootstrap templates
+- customer-owned dual-asset examples
+- public and redacted transcript packs
 
-The repo is meant to be forked and adapted, not merely configured around one vendor.
+The point is not to trap customers inside one vendor set.
 
-### 2. Policy is first-class state
+The point is to make private tokenization infrastructure legible, forkable, and adaptable.
 
-A lot of systems say they are compliance-aware when they really mean:
+## What the bridge rails mean in practice
 
-- “we check a few things before we proceed”
+The phrase “Ethereum bridge rails” can sound vague, but the operating model is simple.
 
-TAP treats policy as durable, versioned, auditable state.
+On the private side:
 
-We built:
+- assets are issued, transferred, and controlled inside the permissioned consortium environment
+- balances and internal state can remain private
+- proof-linked compliance and issuer governance control the transitions
 
-- versioned policy registry
-- deterministic policy hash
-- policy linkage in proof public inputs
-- settlement-time policy verification
-- explicit stale or mismatched policy rejection
+On the public side:
 
-That gives regulated operators something much closer to real governance and control evidence.
+- equivalent or wrapped public assets can be minted, released, locked, or redeemed
+- public wallets, venues, and liquidity can interact with those public representations
 
-### 3. Issuer operations are part of the protocol surface
+The bridge is the controlled handoff between those environments.
 
-Institutional issuance is not just a technical transaction.
+For stablecoins, this means:
 
-It is an operational process involving:
+- private bank stablecoin inside the consortium
+- public stablecoin representation on Ethereum when needed
 
-- roles
-- approvals
-- exceptions
-- auditability
+For tokenized equities, it may mean:
 
-That is why TAP includes maker-checker controls and explicit lifecycle actions for:
+- private restricted asset inside the consortium
+- limited or selective external settlement representation depending on regulation and venue design
 
-- stablecoin mint
-- stablecoin burn
-- stock issue
-- stock allocation
-- stock restriction
-- stock redemption
+The important point is that public Ethereum becomes a rail, not the whole world.
 
-This is how tokenization starts to look like actual institutional infrastructure instead of just token deployment.
+## Why this becomes practical now
 
-### 4. Stablecoin and stock are treated as one market system
+This architecture is becoming practical because several things now exist at the same time:
 
-One of the key decisions in this build was to stop thinking about stablecoins and tokenized securities as separate demos.
+- better proof-native execution environments
+- better recursive proof infrastructure
+- better ways to bring off-chain facts into on-chain state transitions
+- zkTLS and attestation tooling
+- stronger demand for institutional privacy and control
+- real need for tokenized cash and tokenized risk assets to coexist
 
-They are not separate.
+The timing matters.
 
-In a private market environment:
+The first public wave of tokenization created market awareness.
 
-- stablecoins are the cash rail
-- tokenized stocks, funds, and certificates are the risk assets
+The next wave will be defined by private infrastructure, institutional controls, and selective public interoperability.
 
-If you want to show the future, you need both.
+## Where this goes next
 
-That is why we built:
+The path from here is straightforward:
 
-- a stock lifecycle workflow
-- a dual-asset flagship transcript
-- a customer-owned dual-asset integration example
+- banks and issuers bring their own sandbox APIs and source systems
+- TAP is wired into those systems through adapter mode or zkTLS mode
+- policies, approvals, and asset workflows are tuned to the real operating model
+- private consortium rails become the core system
+- Ethereum remains the public bridge layer when it is useful
 
-The resulting story is much stronger than “here is a stablecoin demo” or “here is a tokenized stock demo.”
+That is the future shape of tokenized assets.
 
-It becomes:
+Not everything public.
 
-- here is a private market stack
+Not everything closed.
 
-## The source side: adapters and zkTLS
+Private where institutions need privacy.
+Public where markets need interoperability.
+Proofs and policy in the middle.
 
-One of the most important parts of the project is how source truth enters the system.
-
-### Reference adapters
-
-We implemented and scaffolded adapters across the key categories:
-
-- balance/account state
-- identity/KYC
-- holdings/custody
-- generic REST provider integrations
-- bank-style server-to-server APIs
-
-Those are the public proof points.
-
-### zkTLS integration
-
-We also patched in a real zkTLS path using the Zeko `zk-verify-poc` work.
-
-That allowed us to demonstrate:
-
-- external TLS-attested source collection
-- bank-shaped fixture data
-- proof mapping into TAP settlement records
-
-This is strategically important because many customer environments will not begin with a polished partner API. Some will begin with a secure HTTPS system that needs to be proven, not merely trusted.
-
-### Why both modes matter
-
-The right answer is not “always use adapters” or “always use zkTLS.”
-
-The right answer is:
-
-- use adapters when a customer has a stable API
-- use zkTLS when they have a meaningful HTTPS system but no clean integration surface yet
-
-That guidance is now built directly into TAP’s provider strategy and customer onboarding materials.
-
-## The proof side: from mocks to real runtime lanes
-
-A protocol like this only becomes credible when proof verification is real enough to matter operationally.
-
-We moved through that progression.
-
-TAP now includes:
-
-- cryptographic proof envelopes
-- real `o1js` runtime lanes for `eligibility_v1`
-- real `o1js` runtime lanes for `transfer_compliance_v1`
-- pluggable verifier support
-- external-proof preservation for zkTLS-backed flows
-
-That means the repo is no longer only a UI or integration mockup. The proof and settlement surfaces are materially real.
-
-## The operator side: transcripts, packs, and release discipline
-
-Another major theme in the build was making the system operable, not just architecturally interesting.
-
-We built one-command flows for:
-
-- stock lifecycle
-- dual-asset flagship path
-- identity reference path
-- holdings reference path
-- customer-owned dual-asset integration path
-
-Each of these can generate verified transcripts and public-safe artifacts.
-
-That matters because:
-
-- bank teams need evidence
-- internal champions need something shareable
-- public repositories need a coherent story
-
-The public pack now has two key roles:
-
-- the flagship transcript explains the product
-- the customer-owned dual-asset transcript explains the integration path
-
-That combination is much closer to how enterprise adoption really happens.
-
-## What this enables that earlier tokenization systems did not
-
-### Private consortium issuance
-
-Multiple institutions can participate in one permissioned environment while preserving:
-
-- private balances
-- private customer state
-- internal routing and governance value
-
-### Verifiable off-chain controls
-
-Instead of pushing raw institutional data on-chain, TAP lets issuers prove or attest:
-
-- balance thresholds
-- KYC pass state
-- suitability or accreditation
-- holdings state
-- reserve or treasury conditions
-
-### Shared but sovereign infrastructure
-
-Institutions can operate as a consortium while still retaining control over:
-
-- participant access
-- infrastructure surface
-- policy lifecycle
-- application ecosystem value
-
-### Public-chain interoperability without public-chain dependence
-
-This is the important design shift.
-
-Bridging to Ethereum or another public chain becomes a choice, not the base operating assumption.
-
-That means:
-
-- private markets can stay private
-- public distribution can still happen where useful
-- the customer does not have to give up all information advantage just to get blockchain programmability
-
-## Where TAP stands now
-
-TAP is already beyond architecture-only status.
-
-The repo now contains:
-
-- a credible private tokenization demo
-- a dual-asset product story
-- real proof lanes
-- reference adapters
-- zkTLS integration
-- customer onboarding and sandbox mapping infrastructure
-
-The remaining work is not “can this concept be made concrete?”
-
-It is:
-
-- customer-specific integrations
-- production hardening
-- deployment discipline
-- operational rollout
-
-That is exactly the right stage for an open-source evaluation package.
-
-## The bigger thesis
-
-The biggest shift in tokenization is not that more assets will appear on-chain.
-
-It is that serious tokenization will move away from fully public default state and toward private, permissioned, institution-operated environments with optional public settlement edges.
-
-In other words:
-
-- sovereign rollups for consortiums
-- private compliance and policy state
-- auditable proofs instead of blanket disclosure
-- asset markets that can remain institutionally meaningful instead of immediately commoditized
-
-That is where stablecoins and tokenized equities begin to make sense as one system.
-
-Not because they are the same asset.
-
-But because together they create the basis for private, programmable on-chain markets that still satisfy real institutional constraints.
-
-That is the future TAP is designed for.
-
-And it is finally practical to build.
+That is the model TAP is built for.
